@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CompIno 2.0.0</title>
+  <style>
+    :root { color-scheme: light dark; --ink:#17202a; --muted:#5d6d7e; --line:#d5dde6; --bg:#f4f7fb; --card:#fff; --accent:#0e6b4c; }
+    @media (prefers-color-scheme: dark) { :root { --ink:#e8eef5; --muted:#a9b6c4; --line:#2c3846; --bg:#10161c; --card:#1b242e; --accent:#7dcea0; } }
+    body { margin:0; font:17px/1.6 Georgia, serif; color:var(--ink); background:var(--bg); }
+    header, main { max-width:860px; margin:0 auto; padding:24px 20px; }
+    pre { background:var(--card); border:1px solid var(--line); padding:12px; overflow:auto; border-radius:10px; }
+    code, pre { font-family:ui-monospace, monospace; font-size:.9rem; }
+    button { margin-right:8px; }
+    .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CompIno 2.0.0</h1>
+    <p class="muted" id="sub">A short language that becomes an Arduino sketch.</p>
+    <div>
+      <button data-lang="en">English</button>
+      <button data-lang="pt">Português</button>
+      <button data-lang="es">Español</button>
+      <button data-lang="fr">Français</button>
+    </div>
+  </header>
+  <main>
+    <h2 id="run"></h2>
+    <pre>npx comptoino sketch.cno</pre>
+    <h2 id="shape"></h2>
+    <pre id="shape-code">writable(@6)
+&(250) {
+  setPin(@6, true)
+  sleep(250)
+  setPin(@6, false)
+}</pre>
+    <h2 id="new"></h2>
+    <pre>import Math
+$n<int> = min(1, 4)
+$p = pow(2, 8)
+$r = random(0, 10)
+
+import Servo
+$servo = new Servo(@9)
+
+serialBeg()
+serialPrint("hi")
+$in = serialRead()
+tone(@8, 440)
+tone(@8, null)
+
+switch $n {
+  if(== 0) { setPin(@6, HIGH) }
+  if(> 5) { setPwm(@5, 200) }
+}
+
+getPatient &{
+  whait serialPrint(work())
+}</pre>
+    <p id="note"></p>
+  </main>
+  <script>
+    const text = {
+      en: { sub: "A short language that becomes an Arduino sketch.", run: "Run", shape: "Shape", newer: "New in 2.0.0", note: "Comments are #, //, /* */ and #+ +#. Semicolons are optional, but if one command uses one, every command uses one. Preinstalled libraries do not need .h." },
+      pt: { sub: "Uma linguagem curta que vira um sketch Arduino.", run: "Executar", shape: "Forma", newer: "Novo na 2.0.0", note: "Comentários: #, //, /* */ e #+ +#. O ; é opcional, mas se um comando usa, todos usam. Bibliotecas pré-instaladas não usam .h." },
+      es: { sub: "Un lenguaje corto que se convierte en un sketch de Arduino.", run: "Ejecutar", shape: "Forma", newer: "Nuevo en 2.0.0", note: "Comentarios: #, //, /* */ y #+ +#. El ; es opcional, pero si un comando lo usa, todos lo usan. Las bibliotecas incluidas no usan .h." },
+      fr: { sub: "Un langage court qui devient un sketch Arduino.", run: "Lancer", shape: "Forme", newer: "Nouveau en 2.0.0", note: "Commentaires : #, //, /* */ et #+ +#. Le ; est facultatif, mais s'il y en a un, tous les commandes en ont un. Les bibliothèques incluses n'utilisent pas .h." }
+    };
+    function setLang(code) {
+      const t = text[code];
+      document.getElementById("sub").textContent = t.sub;
+      document.getElementById("run").textContent = t.run;
+      document.getElementById("shape").textContent = t.shape;
+      document.getElementById("new").textContent = t.newer;
+      document.getElementById("note").textContent = t.note;
+      document.documentElement.lang = code === "pt" ? "pt-BR" : code === "es" ? "es-ES" : code === "fr" ? "fr-FR" : "en-US";
+    }
+    document.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+    setLang("en");
+  </script>
+</body>
+</html>

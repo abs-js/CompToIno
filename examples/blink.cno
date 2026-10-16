@@ -1,0 +1,6 @@
+writable(@6)
+&(250) {
+  setPin(@6, true)
+  sleep(250)
+  setPin(@6, false)
+}

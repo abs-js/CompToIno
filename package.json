@@ -1,0 +1,22 @@
+{
+  "name": "comptoino",
+  "version": "2.0.0",
+  "description": "CompIno transpiles simple .cno programs into Arduino .ino sketches.",
+  "bin": {
+    "CompToIno": "./bin/comptoino.js",
+    "comptoino": "./bin/comptoino.js",
+    "CompIno": "./bin/comptoino.js"
+  },
+  "main": "./index.js",
+  "files": ["bin", "index.js", "scripts", "docs", "examples", "cno-libs", "README.md", "LICENSE"],
+  "keywords": ["arduino", "compino", "transpiler", "ino"],
+  "license": "MIT",
+  "engines": { "node": ">=14" },
+  "publishConfig": { "access": "public" },
+  "scripts": { "test": "node test/test.js" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abs-js/CompIno.git",
+    "directory": "v2.0.0"
+  }
+}
