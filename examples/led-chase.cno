@@ -1,0 +1,24 @@
+# Light three LEDs one after another.
+# Pins 6, 7 and 8 are the LEDs. Each stays on for 250 ms.
+
+writable(@6)
+writable(@7)
+writable(@8)
+$tempo = 250
+
+&{
+  setPin(@6, true)
+  setPin(@7, false)
+  setPin(@8, false)
+  sleep($tempo)
+
+  setPin(@6, false)
+  setPin(@7, true)
+  setPin(@8, false)
+  sleep($tempo)
+
+  setPin(@6, false)
+  setPin(@7, false)
+  setPin(@8, true)
+  sleep($tempo)
+}

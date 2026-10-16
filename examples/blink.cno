@@ -1,6 +1,11 @@
+# Blink one LED.
+# Pin 6 is an output. The loop waits 250 ms after each pass.
+
 writable(@6)
+
 &(250) {
-  setPin(@6, true)
+  setPin(@6, true)   # LED on
   sleep(250)
-  setPin(@6, false)
+  setPin(@6, false)  # LED off
+  sleep(250)
 }

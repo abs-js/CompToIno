@@ -1,0 +1,20 @@
+# Choose an action from a number.
+# switch compares the chosen variable with each if.
+
+serialBeg()
+$mode<int> = 1
+
+&{
+  switch $mode {
+    if(== 0) {
+      serialPrint("off")
+    }
+    if(== 1) {
+      serialPrint("on")
+    }
+    if(> 1) {
+      serialPrint("other")
+    }
+  }
+  sleep(1000)
+}

@@ -1,0 +1,12 @@
+# A potentiometer moves a servo.
+# A0 is the knob. Pin 9 is the servo signal.
+
+import Servo
+readable(@A0)
+$servo = new Servo(@9)
+
+&(50) {
+  $knob = analog(0)
+  $angle = map($knob, 0, 1023, 0, 180)
+  $servo.write($angle)
+}

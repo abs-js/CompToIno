@@ -1,0 +1,13 @@
+# Fade a PWM LED up, then start again.
+# Pin 5 must be a PWM pin. The ~ mark means PWM.
+
+writable(@~5)
+$brightness<int> = 0
+
+&(15) {
+  setPwm(@5, $brightness)
+  $brightness = $brightness + 5
+  if ($brightness > 255) {
+    $brightness = 0
+  }
+}

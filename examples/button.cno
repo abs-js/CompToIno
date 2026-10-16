@@ -1,0 +1,14 @@
+# Read a button and copy its state to an LED.
+# Pin 2 is the button. Pin 6 is the LED.
+
+readable(@2)
+writable(@6)
+
+&(20) {
+  $pressed = getPin(@2)
+  if ($pressed) {
+    setPin(@6, true)
+  } else {
+    setPin(@6, false)
+  }
+}

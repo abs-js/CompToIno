@@ -1,0 +1,11 @@
+# Read the serial monitor and answer.
+# serialBeg starts the port. serialRead waits for a number.
+
+serialBeg()
+
+&(100) {
+  $in = serialRead()
+  if ($in > 0) {
+    serialPrint($in)
+  }
+}

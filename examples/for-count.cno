@@ -1,0 +1,11 @@
+# Repeat a print with for.
+# for takes a start, a test, and a step.
+
+serialBeg()
+
+&{
+  for ($i = 0, $i < 5, $i++) {
+    serialPrint($i)
+  }
+  sleep(1000)
+}

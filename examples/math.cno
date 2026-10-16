@@ -1,0 +1,19 @@
+# Use the built-in Math helpers.
+# min, max, abs, constrain, pow and random are ready to call.
+
+import Math
+serialBeg()
+
+&(1000) {
+  $small = min(3, 9)
+  $big = max(3, 9)
+  $size = abs(0 - 12)
+  $safe = constrain($size, 0, 10)
+  $power = pow(2, 4)
+  $roll = random(1, 7)
+  serialPrint($small)
+  serialPrint($big)
+  serialPrint($safe)
+  serialPrint($power)
+  serialPrint($roll)
+}

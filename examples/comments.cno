@@ -1,0 +1,17 @@
+# Two comment styles, plus a block comment.
+# This line is a hash comment.
+// This line is a slash comment.
+
+#+
+This whole block is a comment.
+It ends at the plus-hash mark.
++#
+
+/* This is also a comment. */
+
+writable(@13)
+&(1000) {
+  setPin(@13, true)
+  sleep(200)
+  setPin(@13, false)
+}

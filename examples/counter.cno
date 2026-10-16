@@ -1,0 +1,24 @@
+# Count rising edges from a sensor and print the total.
+# A hit is counted only when the pin changes from 0 to 1.
+
+readable(@4)
+serialBeg()
+$count<int> = 0
+$last<int> = 0
+
+func countHit ($now, $before) {
+  if ($now == 1 and $before == 0) {
+    return 1
+  }
+  return 0
+}
+
+&(30) {
+  $now = getPin(@4)
+  $hit = countHit($now, $last)
+  if ($hit) {
+    $count = $count + 1
+    serialPrint($count)
+  }
+  $last = $now
+}

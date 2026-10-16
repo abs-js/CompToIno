@@ -1,0 +1,10 @@
+# Read an analog sensor and print the value.
+# A0 is a potentiometer or any analog sensor, 0 to 1023.
+
+readable(@A0)
+serialBeg()
+
+&(200) {
+  $level = analog(0)
+  serialPrint($level)
+}

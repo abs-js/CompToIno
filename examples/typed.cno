@@ -1,0 +1,12 @@
+# A typed variable only accepts the declared type.
+# $n<int> can hold a number. A later string would be a type error.
+
+serialBeg()
+$n<int> = 10
+$text = str($n)
+
+&(500) {
+  $n = $n + 1
+  serialPrint($n)
+  serialPrint($text)
+}

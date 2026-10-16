@@ -1,0 +1,16 @@
+# Play a tone while a sensor is active, then stop.
+# Pin 3 is a digital sensor. Pin 8 is a buzzer.
+
+readable(@3)
+
+&(20) {
+  $beam = getPin(@3)
+  switch $beam {
+    if(== 0) {
+      tone(@8, 880)      # sensor active: sound on
+    }
+    else {
+      tone(@8, null)     # sensor clear: sound off
+    }
+  }
+}
