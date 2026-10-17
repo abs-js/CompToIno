@@ -1,84 +1,1109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CompIno 2.0.0</title>
-  <style>
-    :root { color-scheme: light dark; --ink:#17202a; --muted:#5d6d7e; --line:#d5dde6; --bg:#f4f7fb; --card:#fff; --accent:#0e6b4c; }
-    @media (prefers-color-scheme: dark) { :root { --ink:#e8eef5; --muted:#a9b6c4; --line:#2c3846; --bg:#10161c; --card:#1b242e; --accent:#7dcea0; } }
-    body { margin:0; font:17px/1.6 Georgia, serif; color:var(--ink); background:var(--bg); }
-    header, main { max-width:860px; margin:0 auto; padding:24px 20px; }
-    pre { background:var(--card); border:1px solid var(--line); padding:12px; overflow:auto; border-radius:10px; }
-    code, pre { font-family:ui-monospace, monospace; font-size:.9rem; }
-    button { margin-right:8px; }
-    .muted { color:var(--muted); }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CompToIno — Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0e1117; --surface:#161b22; --surface2:#1c2128;
+  --border:#30363d; --text:#e6edf3; --muted:#8b949e;
+  --accent:#00b4d8; --accent2:#f0883e; --green:#3fb950;
+  --kw:#ff7b72; --fn:#79c0ff; --str:#a5d6ff;
+  --num:#79c0ff; --pin:#d2a8ff; --comment:#8b949e;
+  --sidebar-w:240px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;display:flex;min-height:100vh}
+
+/* sidebar */
+#sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;display:flex;flex-direction:column;padding:0 0 32px;z-index:10}
+.sidebar-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.sidebar-logo .name{font-size:15px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--accent);display:block}
+.sidebar-logo .ver{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* lang switcher */
+.lang-switcher{display:flex;gap:4px;padding:10px 14px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.lang-btn{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--muted);cursor:pointer;font-size:11.5px;font-family:'Inter',sans-serif;padding:4px 0;transition:all .15s;font-weight:500}
+.lang-btn:hover{color:var(--text);border-color:var(--text)}
+.lang-btn.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600}
+
+.nav-group{padding:12px 20px 4px;font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+#sidebar a{display:block;padding:5px 20px;color:var(--muted);text-decoration:none;font-size:13.5px;border-left:2px solid transparent;transition:color .15s,border-color .15s}
+#sidebar a:hover{color:var(--text)}
+#sidebar a.active{color:var(--accent);border-left-color:var(--accent)}
+
+/* content */
+#content{margin-left:var(--sidebar-w);flex:1;max-width:900px;padding:48px 52px 96px}
+.section{margin-bottom:64px}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+h1{font-size:30px;font-weight:600;line-height:1.2;margin-bottom:16px}
+h2{font-size:20px;font-weight:600;margin-bottom:12px;margin-top:40px}
+h2:first-child{margin-top:0}
+p{color:#c9d1d9;max-width:68ch;margin-bottom:14px}
+p strong{color:var(--text);font-weight:500}
+
+.hero-install{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent);margin-top:24px;width:fit-content}
+.hero-install .prompt{color:var(--muted)}
+.hero-install button{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);padding:0;display:flex;align-items:center}
+.hero-install button:hover{color:var(--text)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;margin-top:16px}
+.col-desc{padding-top:4px}
+.col-desc p{font-size:14px}
+.col-desc .tag{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent2);padding:1px 7px;margin:2px 2px 2px 0}
+
+.cblock{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.cblock-header{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
+.cblock-header .fname{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);flex:1}
+.cblock-header .lang-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-right:10px;border:1px solid var(--border);border-radius:3px;padding:1px 6px}
+.copy-btn{background:none;border:1px solid var(--border);border-radius:5px;color:var(--muted);cursor:pointer;font-size:11.5px;font-family:'Inter',sans-serif;padding:3px 10px;display:flex;align-items:center;gap:5px;transition:color .15s,border-color .15s}
+.copy-btn:hover{color:var(--text);border-color:var(--text)}
+.copy-btn.copied{color:var(--green);border-color:var(--green)}
+.cblock pre{padding:16px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;tab-size:2}
+.cblock-full{margin-top:16px}
+
+.kw{color:var(--kw)}.fn{color:var(--fn)}.str{color:var(--str)}.nm{color:var(--num)}.pin{color:var(--pin)}.cm{color:var(--comment);font-style:italic}.op{color:#e6edf3}.var{color:#ffa657}.hi{color:var(--accent2)}
+
+.cmp-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12.5px;margin-top:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.cmp-table th{background:var(--surface);padding:10px 16px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:'Inter',sans-serif}
+.cmp-table td{padding:10px 16px;border-top:1px solid var(--border);vertical-align:top}
+.cmp-table tr:nth-child(odd) td{background:var(--surface2)}
+.cmp-table .cno-col{color:var(--accent)}.cmp-table .ino-col{color:var(--muted)}
+
+.err-grid{display:grid;grid-template-columns:auto 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:16px;font-size:13px}
+.err-grid .code{background:var(--surface2);font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent2);padding:9px 14px;border-top:1px solid var(--border)}
+.err-grid .desc{background:var(--surface);color:var(--muted);padding:9px 14px;border-top:1px solid var(--border)}
+.err-grid .code:first-child,.err-grid .desc:nth-child(2){border-top:none}
+
+.fn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:16px}
+.fn-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:12px 14px}
+.fn-card .sig{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fn);margin-bottom:4px}
+.fn-card .desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+.lib-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.lib-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--pin)}
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:780px){
+  #sidebar{display:none}
+  #content{margin-left:0;padding:28px 20px 64px}
+  .two-col{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>CompIno 2.0.0</h1>
-    <p class="muted" id="sub">A short language that becomes an Arduino sketch.</p>
-    <div>
-      <button data-lang="en">English</button>
-      <button data-lang="pt">Português</button>
-      <button data-lang="es">Español</button>
-      <button data-lang="fr">Français</button>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <span class="name">CompToIno</span>
+    <span class="ver">v2.0.0</span>
+  </div>
+
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+
+  <div class="nav-group" data-t="nav.start"></div>
+  <a href="#intro" data-t="nav.what"></a>
+  <a href="#install" data-t="nav.install"></a>
+
+  <div class="nav-group" data-t="nav.syntax"></div>
+  <a href="#estrutura" data-t="nav.structure"></a>
+  <a href="#variaveis" data-t="nav.variables"></a>
+  <a href="#pins" data-t="nav.pins"></a>
+  <a href="#fluxo" data-t="nav.flow"></a>
+  <a href="#funcoes" data-t="nav.functions"></a>
+  <a href="#classes" data-t="nav.classes"></a>
+  <a href="#erros" data-t="nav.errors"></a>
+
+  <div class="nav-group" data-t="nav.ref"></div>
+  <a href="#builtins" data-t="nav.builtins"></a>
+  <a href="#libs" data-t="nav.libs"></a>
+  <a href="#comentarios" data-t="nav.comments"></a>
+
+  <div class="nav-group" data-t="nav.examples"></div>
+  <a href="#ex-blink" data-t="nav.ex_blink"></a>
+  <a href="#ex-serial" data-t="nav.ex_serial"></a>
+  <a href="#ex-servo" data-t="nav.ex_servo"></a>
+  <a href="#ex-sensor" data-t="nav.ex_sensor"></a>
+</nav>
+
+<main id="content">
+
+  <!-- INTRO -->
+  <section class="section" id="intro">
+    <div class="section-label">.cno → .ino</div>
+    <h1>CompToIno</h1>
+    <p data-t="intro.desc"></p>
+    <div class="hero-install">
+      <span class="prompt">$</span>
+      <span>npx comptoino sketch.cno</span>
+      <button onclick="copyText('npx comptoino sketch.cno',this)" title="Copy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
     </div>
-  </header>
-  <main>
-    <h2 id="run"></h2>
-    <pre>npx comptoino sketch.cno</pre>
-    <h2 id="shape"></h2>
-    <pre id="shape-code">writable(@6)
-&(250) {
-  setPin(@6, true)
-  sleep(250)
-  setPin(@6, false)
-}</pre>
-    <h2 id="new"></h2>
-    <pre>import Math
-$n<int> = min(1, 4)
-$p = pow(2, 8)
-$r = random(0, 10)
+  </section>
 
-import Servo
-$servo = new Servo(@9)
+  <!-- INSTALL -->
+  <section class="section" id="install">
+    <div class="section-label" data-t="install.label"></div>
+    <h2 data-t="install.title"></h2>
+    <p data-t="install.desc"></p>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">terminal</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="cm" data-t="install.comment1"></span>
+npx comptoino sketch.cno
 
-serialBeg()
-serialPrint("hi")
-$in = serialRead()
-tone(@8, 440)
-tone(@8, null)
+<span class="cm" data-t="install.comment2"></span>
+CompToIno -v        <span class="cm" data-t="install.flag_v"></span>
+CompToIno -h        <span class="cm" data-t="install.flag_h"></span>
+CompToIno -d sketch.cno  <span class="cm" data-t="install.flag_d"></span></pre>
+    </div></div>
+  </section>
 
-switch $n {
-  if(== 0) { setPin(@6, HIGH) }
-  if(> 5) { setPwm(@5, 200) }
+  <!-- ESTRUTURA -->
+  <section class="section" id="estrutura">
+    <div class="section-label" data-t="structure.label"></div>
+    <h2 data-t="structure.title"></h2>
+    <p data-t="structure.desc"></p>
+    <div class="two-col">
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname">sketch.cno</span>
+          <span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="cm" data-t="structure.c1"></span>
+<span class="fn">writable</span>(<span class="pin">@13</span>)
+
+<span class="cm" data-t="structure.c2"></span>
+<span class="kw">&</span> {
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+  <span class="fn">sleep</span>(<span class="nm">500</span>)
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
+  <span class="fn">sleep</span>(<span class="nm">500</span>)
 }
 
-getPatient &{
-  whait serialPrint(work())
+<span class="cm" data-t="structure.c3"></span>
+<span class="kw">&</span>(<span class="nm">250</span>) {
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+  <span class="fn">sleep</span>(<span class="nm">250</span>)
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
 }</pre>
-    <p id="note"></p>
-  </main>
-  <script>
-    const text = {
-      en: { sub: "A short language that becomes an Arduino sketch.", run: "Run", shape: "Shape", newer: "New in 2.0.0", note: "Comments are #, //, /* */ and #+ +#. Semicolons are optional, but if one command uses one, every command uses one. Preinstalled libraries do not need .h." },
-      pt: { sub: "Uma linguagem curta que vira um sketch Arduino.", run: "Executar", shape: "Forma", newer: "Novo na 2.0.0", note: "Comentários: #, //, /* */ e #+ +#. O ; é opcional, mas se um comando usa, todos usam. Bibliotecas pré-instaladas não usam .h." },
-      es: { sub: "Un lenguaje corto que se convierte en un sketch de Arduino.", run: "Ejecutar", shape: "Forma", newer: "Nuevo en 2.0.0", note: "Comentarios: #, //, /* */ y #+ +#. El ; es opcional, pero si un comando lo usa, todos lo usan. Las bibliotecas incluidas no usan .h." },
-      fr: { sub: "Un langage court qui devient un sketch Arduino.", run: "Lancer", shape: "Forme", newer: "Nouveau en 2.0.0", note: "Commentaires : #, //, /* */ et #+ +#. Le ; est facultatif, mais s'il y en a un, tous les commandes en ont un. Les bibliothèques incluses n'utilisent pas .h." }
-    };
-    function setLang(code) {
-      const t = text[code];
-      document.getElementById("sub").textContent = t.sub;
-      document.getElementById("run").textContent = t.run;
-      document.getElementById("shape").textContent = t.shape;
-      document.getElementById("new").textContent = t.newer;
-      document.getElementById("note").textContent = t.note;
-      document.documentElement.lang = code === "pt" ? "pt-BR" : code === "es" ? "es-ES" : code === "fr" ? "fr-FR" : "en-US";
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname" data-t="structure.generated"></span>
+          <span class="lang-badge">ino</span>
+        </div>
+        <pre><span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(<span class="nm">13</span>, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(<span class="nm">13</span>, HIGH);
+  <span class="fn">delay</span>(<span class="nm">500</span>);
+  <span class="fn">digitalWrite</span>(<span class="nm">13</span>, LOW);
+  <span class="fn">delay</span>(<span class="nm">500</span>);
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- VARIÁVEIS -->
+  <section class="section" id="variaveis">
+    <div class="section-label" data-t="vars.label"></div>
+    <h2 data-t="vars.title"></h2>
+    <div class="two-col">
+      <div class="col-desc">
+        <p data-t="vars.desc1"></p>
+        <p data-t="vars.desc2"></p>
+        <div><span class="tag">int</span><span class="tag">float</span><span class="tag">str</span><span class="tag">bool</span></div>
+        <p style="margin-top:12px" data-t="vars.desc3"></p>
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname" data-t="vars.fname"></span>
+          <span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="cm" data-t="vars.c1"></span>
+<span class="var">$counter</span> = <span class="nm">0</span>
+<span class="var">$name</span>    = <span class="str">"Arduino"</span>
+<span class="var">$on</span>      = <span class="kw">true</span>
+
+<span class="cm" data-t="vars.c2"></span>
+<span class="var">$temp</span><span class="op">&lt;</span><span class="hi">float</span><span class="op">&gt;</span> = <span class="nm">36.6</span>
+<span class="var">$cycles</span><span class="op">&lt;</span><span class="hi">int</span><span class="op">&gt;</span> = <span class="nm">100</span>
+
+<span class="cm" data-t="vars.c3"></span>
+<span class="var">g$total</span> = <span class="nm">0</span>
+
+<span class="cm" data-t="vars.c4"></span>
+<span class="var">$counter</span> += <span class="nm">1</span>
+<span class="var">$counter</span>++
+
+<span class="cm" data-t="vars.c5"></span>
+<span class="var">$a</span> = <span class="nm">10</span>
+<span class="var">$b</span> = <span class="nm">20</span>
+<span class="var">$a</span> <span class="op">&lt;=&gt;</span> <span class="var">$b</span>   <span class="cm" data-t="vars.c5b"></span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- PINS -->
+  <section class="section" id="pins">
+    <div class="section-label" data-t="pins.label"></div>
+    <h2 data-t="pins.title"></h2>
+    <p data-t="pins.desc"></p>
+    <table class="cmp-table">
+      <thead><tr>
+        <th data-t="pins.th1"></th>
+        <th data-t="pins.th2"></th>
+        <th data-t="pins.th3"></th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="cno-col">@6</td><td data-t="pins.dig"></td><td class="ino-col">digitalWrite(6,…) / digitalRead(6)</td></tr>
+        <tr><td class="cno-col">@~9</td><td>PWM</td><td class="ino-col">analogWrite(9,…)</td></tr>
+        <tr><td class="cno-col">@A2</td><td data-t="pins.ana"></td><td class="ino-col">analogRead(A2)</td></tr>
+        <tr><td class="cno-col">@13</td><td data-t="pins.led"></td><td class="ino-col">digitalRead(13) / digitalWrite(13,…)</td></tr>
+      </tbody>
+    </table>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">pins.cno</span>
+        <span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="cm" data-t="pins.c1"></span>
+<span class="fn">writable</span>(<span class="pin">@6</span>)    <span class="cm"># pinMode(6, OUTPUT)</span>
+<span class="fn">readable</span>(<span class="pin">@7</span>)    <span class="cm"># pinMode(7, INPUT)</span>
+
+<span class="cm" data-t="pins.c2"></span>
+<span class="fn">setPin</span>(<span class="pin">@6</span>, <span class="kw">HIGH</span>)   <span class="cm" data-t="pins.on"></span>
+<span class="fn">setPin</span>(<span class="pin">@6</span>, <span class="kw">false</span>)  <span class="cm" data-t="pins.off"></span>
+<span class="fn">setPwm</span>(<span class="pin">@~9</span>, <span class="nm">128</span>)   <span class="cm"># analogWrite(9, 128)</span>
+
+<span class="cm" data-t="pins.c3"></span>
+<span class="var">$btn</span>    = <span class="fn">getPin</span>(<span class="pin">@7</span>)     <span class="cm"># digitalRead</span>
+<span class="var">$sensor</span> = <span class="fn">analog</span>(<span class="pin">@A0</span>)   <span class="cm"># analogRead(A0) → 0..1023</span>
+
+<span class="cm" data-t="pins.c4"></span>
+<span class="kw">if</span> (<span class="pin">@7</span> == <span class="kw">HIGH</span>) {
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+}</pre>
+    </div></div>
+  </section>
+
+  <!-- FLUXO -->
+  <section class="section" id="fluxo">
+    <div class="section-label" data-t="flow.label"></div>
+    <h2 data-t="flow.title"></h2>
+
+    <h2>if / elif / else</h2>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">if.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="var">$temp</span> = <span class="fn">analog</span>(<span class="pin">@A0</span>)
+
+<span class="kw">if</span> (<span class="var">$temp</span> <span class="op">&gt;</span> <span class="nm">800</span>) {
+  <span class="fn">serial</span>(<span class="str" data-t="flow.hot"></span>)
+} <span class="kw">elif</span> (<span class="var">$temp</span> <span class="op">&gt;</span> <span class="nm">400</span>) {
+  <span class="fn">serial</span>(<span class="str" data-t="flow.warm"></span>)
+} <span class="kw">else</span> {
+  <span class="fn">serial</span>(<span class="str" data-t="flow.cold"></span>)
+}
+
+<span class="cm" data-t="flow.ops"></span>
+<span class="kw">if</span> (<span class="var">$a</span> <span class="op">&gt;</span> <span class="nm">0</span> <span class="kw">and</span> <span class="var">$b</span> <span class="op">&lt;</span> <span class="nm">10</span>) { }
+<span class="kw">if</span> (<span class="var">$x</span> <span class="op">==</span> <span class="nm">0</span> <span class="kw">or</span> <span class="var">$y</span> <span class="op">==</span> <span class="nm">0</span>) { }
+<span class="kw">if</span> (!<span class="var">$on</span>) { }</pre>
+    </div></div>
+
+    <h2>while / for</h2>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">loops.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="cm" data-t="flow.while_c"></span>
+<span class="var">$n</span> = <span class="nm">0</span>
+<span class="kw">while</span> (<span class="var">$n</span> <span class="op">&lt;</span> <span class="nm">10</span>) {
+  <span class="fn">serial</span>(<span class="var">$n</span>)
+  <span class="var">$n</span>++
+}
+
+<span class="cm" data-t="flow.for_c"></span>
+<span class="kw">for</span> (<span class="var">$i</span> = <span class="nm">0</span>, <span class="var">$i</span> <span class="op">&lt;</span> <span class="nm">5</span>, <span class="var">$i</span>++) {
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+  <span class="fn">sleep</span>(<span class="nm">100</span>)
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
+  <span class="fn">sleep</span>(<span class="nm">100</span>)
+}</pre>
+    </div></div>
+
+    <h2>switch</h2>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">switch.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="var">$mode</span> = <span class="fn">getPin</span>(<span class="pin">@7</span>)
+
+<span class="kw">switch</span> <span class="var">$mode</span> {
+  <span class="kw">if</span> (== <span class="nm">0</span>) {
+    <span class="fn">serial</span>(<span class="str" data-t="flow.sw_off"></span>)
+  }
+  <span class="kw">if</span> (== <span class="nm">1</span>) {
+    <span class="fn">serial</span>(<span class="str" data-t="flow.sw_man"></span>)
+  }
+  <span class="kw">else</span> {
+    <span class="fn">serial</span>(<span class="str" data-t="flow.sw_auto"></span>)
+  }
+}</pre>
+    </div></div>
+  </section>
+
+  <!-- FUNÇÕES -->
+  <section class="section" id="funcoes">
+    <div class="section-label" data-t="funcs.label"></div>
+    <h2 data-t="funcs.title"></h2>
+    <div class="two-col">
+      <div class="col-desc">
+        <p data-t="funcs.desc1"></p>
+        <p data-t="funcs.desc2"></p>
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname" data-t="funcs.fname"></span>
+          <span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="cm" data-t="funcs.c1"></span>
+<span class="kw">func</span> <span class="fn">blink</span>(<span class="var">$times</span>) {
+  <span class="kw">for</span> (<span class="var">$i</span> = <span class="nm">0</span>, <span class="var">$i</span> <span class="op">&lt;</span> <span class="var">$times</span>, <span class="var">$i</span>++) {
+    <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+    <span class="fn">sleep</span>(<span class="nm">200</span>)
+    <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
+    <span class="fn">sleep</span>(<span class="nm">200</span>)
+  }
+}
+
+<span class="cm" data-t="funcs.c2"></span>
+<span class="kw">func</span> <span class="fn">celsius</span>(<span class="var">$raw</span>) {
+  <span class="kw">return</span> <span class="var">$raw</span> <span class="op">*</span> <span class="nm">5</span> <span class="op">/</span> <span class="nm">1024</span> <span class="op">*</span> <span class="nm">100</span>
+}
+
+<span class="cm" data-t="funcs.c3"></span>
+<span class="fn">blink</span>(<span class="nm">3</span>)
+<span class="var">$t</span> = <span class="fn">celsius</span>(<span class="fn">analog</span>(<span class="pin">@A0</span>))</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="section" id="classes">
+    <div class="section-label" data-t="cls.label"></div>
+    <h2 data-t="cls.title"></h2>
+    <div class="two-col">
+      <div class="col-desc">
+        <p data-t="cls.desc1"></p>
+        <p data-t="cls.desc2"></p>
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname">class.cno</span>
+          <span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="kw">class</span> <span class="hi">LED</span> {
+  <span class="kw">func</span> <span class="fn">on</span>(<span class="var">$pin</span>) {
+    <span class="fn">writable</span>(<span class="var">$pin</span>)
+    <span class="fn">setPin</span>(<span class="var">$pin</span>, <span class="kw">true</span>)
+  }
+  <span class="kw">func</span> <span class="fn">off</span>(<span class="var">$pin</span>) {
+    <span class="fn">setPin</span>(<span class="var">$pin</span>, <span class="kw">false</span>)
+  }
+}
+
+<span class="var">$led</span> = <span class="kw">new</span> <span class="hi">LED</span>()
+<span class="var">$led</span>.<span class="fn">on</span>(<span class="pin">@13</span>)
+<span class="fn">sleep</span>(<span class="nm">1000</span>)
+<span class="var">$led</span>.<span class="fn">off</span>(<span class="pin">@13</span>)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ERROS -->
+  <section class="section" id="erros">
+    <div class="section-label" data-t="err.label"></div>
+    <h2>try / catch</h2>
+    <div class="two-col">
+      <div class="col-desc">
+        <p data-t="err.desc1"></p>
+        <p data-t="err.desc2"></p>
+        <p data-t="err.desc3"></p>
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname">errors.cno</span>
+          <span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="kw">try</span> {
+  <span class="var">$val</span> = <span class="fn">getPin</span>(<span class="pin">@7</span>)
+  <span class="fn">serial</span>(<span class="var">$val</span>)
+} <span class="kw">catch</span> <span class="var">$err</span> {
+  <span class="fn">serial</span>(<span class="str" data-t="err.msg"></span>)
+}
+
+<span class="cm" data-t="err.catchop"></span>
+<span class="var">$e</span> = <span class="kw">catch</span> <span class="fn">getPin</span>(<span class="pin">@7</span>)
+<span class="kw">if</span> (<span class="var">$e</span> <span class="op">!=</span> <span class="nm">0</span>) {
+  <span class="fn">serial</span>(<span class="str" data-t="err.failed"></span>)
+}</pre>
+      </div>
+    </div>
+
+    <h2 data-t="err.codes_title"></h2>
+    <div class="err-grid">
+      <div class="code">E000</div><div class="desc" data-t="err.e000"></div>
+      <div class="code">E001</div><div class="desc" data-t="err.e001"></div>
+      <div class="code">E002</div><div class="desc" data-t="err.e002"></div>
+      <div class="code">E003</div><div class="desc" data-t="err.e003"></div>
+      <div class="code">E004</div><div class="desc" data-t="err.e004"></div>
+      <div class="code">E006</div><div class="desc" data-t="err.e006"></div>
+      <div class="code">E007</div><div class="desc" data-t="err.e007"></div>
+      <div class="code">E008</div><div class="desc" data-t="err.e008"></div>
+      <div class="code">E009</div><div class="desc" data-t="err.e009"></div>
+      <div class="code">E011</div><div class="desc" data-t="err.e011"></div>
+      <div class="code">E018</div><div class="desc" data-t="err.e018"></div>
+      <div class="code">E024</div><div class="desc" data-t="err.e024"></div>
+    </div>
+  </section>
+
+  <!-- BUILTINS -->
+  <section class="section" id="builtins">
+    <div class="section-label" data-t="ref.label"></div>
+    <h2 data-t="builtins.title"></h2>
+    <div class="fn-grid">
+      <div class="fn-card"><div class="sig">sleep(ms)</div><div class="desc" data-t="bi.sleep"></div></div>
+      <div class="fn-card"><div class="sig">setPin(pin, val)</div><div class="desc" data-t="bi.setpin"></div></div>
+      <div class="fn-card"><div class="sig">getPin(pin)</div><div class="desc" data-t="bi.getpin"></div></div>
+      <div class="fn-card"><div class="sig">setPwm(pin, val)</div><div class="desc" data-t="bi.setpwm"></div></div>
+      <div class="fn-card"><div class="sig">analog(pin)</div><div class="desc" data-t="bi.analog"></div></div>
+      <div class="fn-card"><div class="sig">writable(pin)</div><div class="desc" data-t="bi.writable"></div></div>
+      <div class="fn-card"><div class="sig">readable(pin)</div><div class="desc" data-t="bi.readable"></div></div>
+      <div class="fn-card"><div class="sig">serial(val)</div><div class="desc" data-t="bi.serial"></div></div>
+      <div class="fn-card"><div class="sig">serialBeg(baud?)</div><div class="desc" data-t="bi.serialbeg"></div></div>
+      <div class="fn-card"><div class="sig">serialRead()</div><div class="desc" data-t="bi.serialread"></div></div>
+      <div class="fn-card"><div class="sig">tone(pin, freq)</div><div class="desc" data-t="bi.tone"></div></div>
+      <div class="fn-card"><div class="sig">tone(pin)</div><div class="desc" data-t="bi.notone"></div></div>
+      <div class="fn-card"><div class="sig">map(v,a,b,c,d)</div><div class="desc" data-t="bi.map"></div></div>
+      <div class="fn-card"><div class="sig">min(a, b)</div><div class="desc" data-t="bi.min"></div></div>
+      <div class="fn-card"><div class="sig">max(a, b)</div><div class="desc" data-t="bi.max"></div></div>
+      <div class="fn-card"><div class="sig">abs(n)</div><div class="desc" data-t="bi.abs"></div></div>
+      <div class="fn-card"><div class="sig">constrain(v,a,b)</div><div class="desc" data-t="bi.constrain"></div></div>
+      <div class="fn-card"><div class="sig">sqrt(n)</div><div class="desc" data-t="bi.sqrt"></div></div>
+      <div class="fn-card"><div class="sig">pow(base, exp)</div><div class="desc" data-t="bi.pow"></div></div>
+      <div class="fn-card"><div class="sig">random(min, max)</div><div class="desc" data-t="bi.random"></div></div>
+      <div class="fn-card"><div class="sig">str(val)</div><div class="desc" data-t="bi.str"></div></div>
+      <div class="fn-card"><div class="sig">int(val)</div><div class="desc" data-t="bi.int"></div></div>
+      <div class="fn-card"><div class="sig">float(val)</div><div class="desc" data-t="bi.float"></div></div>
+    </div>
+  </section>
+
+  <!-- LIBS -->
+  <section class="section" id="libs">
+    <div class="section-label" data-t="ref.label"></div>
+    <h2 data-t="libs.title"></h2>
+    <p data-t="libs.desc"></p>
+    <div class="lib-chips">
+      <span class="lib-chip">Servo</span><span class="lib-chip">LiquidCrystal</span>
+      <span class="lib-chip">LQ</span><span class="lib-chip">DHT</span>
+      <span class="lib-chip">Stepper</span><span class="lib-chip">Adafruit_NeoPixel</span>
+      <span class="lib-chip">Keyboard</span><span class="lib-chip">Mouse</span>
+      <span class="lib-chip">SD</span><span class="lib-chip">Bluetooth</span>
+      <span class="lib-chip">EEPROM</span><span class="lib-chip">IRremote</span>
+      <span class="lib-chip">Math</span>
+    </div>
+    <div class="cblock-full" style="margin-top:20px"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">import.cno</span>
+        <span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="kw">import</span> <span class="hi">Servo</span>
+<span class="var">$motor</span> = <span class="kw">new</span> <span class="hi">Servo</span>(<span class="pin">@9</span>)
+<span class="var">$motor</span>.<span class="fn">write</span>(<span class="nm">90</span>)
+
+<span class="kw">import</span> <span class="hi">Math</span>
+<span class="var">$r</span> = <span class="fn">sqrt</span>(<span class="nm">144</span>)
+
+<span class="cm" data-t="libs.local"></span>
+<span class="kw">import</span> <span class="var">$utils</span> <span class="kw">from</span> <span class="str">"./utils.cnl"</span>
+
+<span class="cm" data-t="libs.header"></span>
+<span class="kw">import</span> <span class="var">$w</span> <span class="kw">from</span> <span class="str">"Wire.h"</span></pre>
+    </div></div>
+  </section>
+
+  <!-- COMENTÁRIOS -->
+  <section class="section" id="comentarios">
+    <div class="section-label" data-t="ref.label"></div>
+    <h2 data-t="comments.title"></h2>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">comments.cno</span>
+        <span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="cm" data-t="comments.l1"></span>
+<span class="cm" data-t="comments.l2"></span>
+
+<span class="cm" data-t="comments.l3"></span>
+
+<span class="cm" data-t="comments.l4"></span></pre>
+    </div></div>
+  </section>
+
+  <!-- EX: BLINK -->
+  <section class="section" id="ex-blink">
+    <div class="section-label" data-t="ex.label"></div>
+    <h2 data-t="ex.blink_title"></h2>
+    <p data-t="ex.blink_desc"></p>
+    <div class="two-col">
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname">blink.cno</span><span class="lang-badge">cno</span>
+          <button class="copy-btn" onclick="copyBlock(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span data-t="ui.copy"></span>
+          </button>
+        </div>
+        <pre><span class="fn">writable</span>(<span class="pin">@13</span>)
+
+<span class="kw">&</span>(<span class="nm">500</span>) {
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+  <span class="fn">sleep</span>(<span class="nm">500</span>)
+  <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
+}</pre>
+      </div>
+      <div class="cblock">
+        <div class="cblock-header">
+          <span class="fname" data-t="structure.generated"></span>
+          <span class="lang-badge">ino</span>
+        </div>
+        <pre><span class="cm">/* Generated by CompIno 2.0.0 */</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">pinMode</span>(<span class="nm">13</span>, OUTPUT);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(<span class="nm">13</span>, HIGH);
+  <span class="fn">delay</span>(<span class="nm">500</span>);
+  <span class="fn">digitalWrite</span>(<span class="nm">13</span>, LOW);
+  <span class="fn">delay</span>(<span class="nm">500</span>);
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- EX: SERIAL -->
+  <section class="section" id="ex-serial">
+    <div class="section-label" data-t="ex.label"></div>
+    <h2 data-t="ex.serial_title"></h2>
+    <p data-t="ex.serial_desc"></p>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">serial.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="fn">writable</span>(<span class="pin">@13</span>)
+<span class="fn">serialBeg</span>()
+<span class="fn">serial</span>(<span class="str" data-t="ex.serial_prompt"></span>)
+
+<span class="kw">&</span> {
+  <span class="var">$n</span> = <span class="fn">serialRead</span>()
+
+  <span class="kw">if</span> (<span class="var">$n</span> <span class="op">&gt;</span> <span class="nm">0</span>) {
+    <span class="kw">for</span> (<span class="var">$i</span> = <span class="nm">0</span>, <span class="var">$i</span> <span class="op">&lt;</span> <span class="var">$n</span>, <span class="var">$i</span>++) {
+      <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">true</span>)
+      <span class="fn">sleep</span>(<span class="nm">200</span>)
+      <span class="fn">setPin</span>(<span class="pin">@13</span>, <span class="kw">false</span>)
+      <span class="fn">sleep</span>(<span class="nm">200</span>)
     }
-    document.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
-    setLang("en");
-  </script>
+    <span class="fn">serial</span>(<span class="str" data-t="ex.serial_done"></span>)
+  }
+
+  <span class="fn">sleep</span>(<span class="nm">100</span>)
+}</pre>
+    </div></div>
+  </section>
+
+  <!-- EX: SERVO -->
+  <section class="section" id="ex-servo">
+    <div class="section-label" data-t="ex.label"></div>
+    <h2 data-t="ex.servo_title"></h2>
+    <p data-t="ex.servo_desc"></p>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">servo.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="kw">import</span> <span class="hi">Servo</span>
+
+<span class="var">$motor</span> = <span class="kw">new</span> <span class="hi">Servo</span>(<span class="pin">@9</span>)
+
+<span class="kw">&</span> {
+  <span class="cm" data-t="ex.servo_c1"></span>
+  <span class="kw">for</span> (<span class="var">$ang</span> = <span class="nm">0</span>, <span class="var">$ang</span> <span class="op">&lt;=</span> <span class="nm">180</span>, <span class="var">$ang</span>++) {
+    <span class="var">$motor</span>.<span class="fn">write</span>(<span class="var">$ang</span>)
+    <span class="fn">sleep</span>(<span class="nm">15</span>)
+  }
+
+  <span class="cm" data-t="ex.servo_c2"></span>
+  <span class="kw">for</span> (<span class="var">$ang</span> = <span class="nm">180</span>, <span class="var">$ang</span> <span class="op">&gt;=</span> <span class="nm">0</span>, <span class="var">$ang</span>--) {
+    <span class="var">$motor</span>.<span class="fn">write</span>(<span class="var">$ang</span>)
+    <span class="fn">sleep</span>(<span class="nm">15</span>)
+  }
+}</pre>
+    </div></div>
+  </section>
+
+  <!-- EX: SENSOR -->
+  <section class="section" id="ex-sensor">
+    <div class="section-label" data-t="ex.label"></div>
+    <h2 data-t="ex.sensor_title"></h2>
+    <p data-t="ex.sensor_desc"></p>
+    <div class="cblock-full"><div class="cblock">
+      <div class="cblock-header">
+        <span class="fname">sensor.cno</span><span class="lang-badge">cno</span>
+        <button class="copy-btn" onclick="copyBlock(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span data-t="ui.copy"></span>
+        </button>
+      </div>
+      <pre><span class="kw">func</span> <span class="fn">toCelsius</span>(<span class="var">$raw</span>) {
+  <span class="cm" data-t="ex.sensor_c1"></span>
+  <span class="kw">return</span> (<span class="var">$raw</span> <span class="op">*</span> <span class="nm">500</span>) <span class="op">/</span> <span class="nm">1024</span>
+}
+
+<span class="fn">serialBeg</span>()
+<span class="fn">writable</span>(<span class="pin">@8</span>)
+
+<span class="kw">&</span>(<span class="nm">1000</span>) {
+  <span class="var">$raw</span>  = <span class="fn">analog</span>(<span class="pin">@A0</span>)
+  <span class="var">$temp</span> = <span class="fn">toCelsius</span>(<span class="var">$raw</span>)
+
+  <span class="fn">serial</span>(<span class="fn">str</span>(<span class="var">$temp</span>))
+
+  <span class="kw">if</span> (<span class="var">$temp</span> <span class="op">&gt;</span> <span class="nm">35</span>) {
+    <span class="fn">setPin</span>(<span class="pin">@8</span>, <span class="kw">HIGH</span>)   <span class="cm" data-t="ex.sensor_alert"></span>
+  } <span class="kw">else</span> {
+    <span class="fn">setPin</span>(<span class="pin">@8</span>, <span class="kw">LOW</span>)
+  }
+}</pre>
+    </div></div>
+  </section>
+
+</main>
+
+<script>
+// ── translations ──────────────────────────────────────
+const T = {
+  pt: {
+    "nav.start":"Início","nav.what":"O que é","nav.install":"Instalação",
+    "nav.syntax":"Sintaxe","nav.structure":"Estrutura","nav.variables":"Variáveis",
+    "nav.pins":"Pins","nav.flow":"Controle de fluxo","nav.functions":"Funções",
+    "nav.classes":"Classes","nav.errors":"Erros & try/catch",
+    "nav.ref":"Referência","nav.builtins":"Funções embutidas","nav.libs":"Bibliotecas","nav.comments":"Comentários",
+    "nav.examples":"Exemplos","nav.ex_blink":"Blink","nav.ex_serial":"Serial","nav.ex_servo":"Servo","nav.ex_sensor":"Sensor",
+    "ui.copy":"Copiar",
+    "intro.desc":"Uma linguagem simples que compila para esboços Arduino (.ino). Escreva menos, leia mais — sem perder acesso nenhum ao hardware.",
+    "install.label":"CLI","install.title":"Instalação & uso",
+    "install.desc":"Nenhuma instalação necessária com npx. Requer Node.js ≥ 14.",
+    "install.comment1":"# compilar e gerar o .ino","install.comment2":"# flags úteis",
+    "install.flag_v":"# versão","install.flag_h":"# ajuda","install.flag_d":"# modo debug (mostra AST)",
+    "structure.label":"Fundamentos","structure.title":"Estrutura do programa",
+    "structure.desc":"No Arduino, você escreve setup() e loop() manualmente. No .cno, isso é implícito: tudo no nível raiz vai para o setup, e o bloco & vira o loop.",
+    "structure.c1":"# setup: declarações e config inicial",
+    "structure.c2":"# & = loop contínuo",
+    "structure.c3":"# &(250) = loop com delay automático ao final",
+    "structure.generated":"sketch.ino gerado",
+    "vars.label":"Dados","vars.title":"Variáveis",
+    "vars.desc1":"Variáveis locais começam com $. Variáveis globais (acessíveis em todo o programa) usam g$.",
+    "vars.desc2":"Você pode opcionalmente declarar o tipo com $nome<tipo>.",
+    "vars.desc3":"O operador <=> troca os valores de duas variáveis.",
+    "vars.fname":"variáveis.cno",
+    "vars.c1":"# variáveis locais","vars.c2":"# com tipo explícito","vars.c3":"# variável global",
+    "vars.c4":"# operações","vars.c5":"# trocar valores","vars.c5b":"# agora $a=20, $b=10",
+    "pins.label":"Hardware","pins.title":"Pins",
+    "pins.desc":"A sintaxe @ referencia pins diretamente, sem precisar declarar constantes.",
+    "pins.th1":"Sintaxe .cno","pins.th2":"Tipo","pins.th3":"Equivalente .ino",
+    "pins.dig":"Digital","pins.ana":"Analógico","pins.led":"Digital (LED built-in)",
+    "pins.c1":"# configurar direção","pins.c2":"# escrever","pins.c3":"# ler","pins.c4":"# atalho: ler direto na expressão",
+    "pins.on":"# liga","pins.off":"# desliga",
+    "flow.label":"Lógica","flow.title":"Controle de fluxo",
+    "flow.hot":"\"muito quente\"","flow.warm":"\"morno\"","flow.cold":"\"frio\"",
+    "flow.ops":"# operadores lógicos",
+    "flow.while_c":"# while clássico","flow.for_c":"# for: (init, condição, passo)",
+    "flow.sw_off":"\"desligado\"","flow.sw_man":"\"manual\"","flow.sw_auto":"\"automático\"",
+    "funcs.label":"Organização","funcs.title":"Funções",
+    "funcs.desc1":"Defina funções com func. Parâmetros usam $. Funções podem retornar valor com return.",
+    "funcs.desc2":"Funções definidas no arquivo são chamadas normalmente — o compilador as coloca antes do setup().",
+    "funcs.fname":"funcoes.cno",
+    "funcs.c1":"# função simples","funcs.c2":"# função com retorno","funcs.c3":"# uso",
+    "cls.label":"Orientação a objetos","cls.title":"Classes",
+    "cls.desc1":"Defina classes com class. Instancie com new. Use Main para indicar o construtor.",
+    "cls.desc2":"Métodos de instância são chamados com ponto (.).",
+    "err.label":"Tratamento de erros",
+    "err.desc1":"Envolva código que pode falhar com try. Capture o erro com catch.",
+    "err.desc2":"Códigos de erro são valores como E006 — podem ser comparados diretamente.",
+    "err.desc3":"O operador catch em uma expressão retorna o código de erro, ou zero se não houver.",
+    "err.msg":"\"Erro ao ler pin\"","err.catchop":"# catch em expressão",
+    "err.failed":"\"falhou\"","err.codes_title":"Códigos de erro do compilador",
+    "err.e000":"Sintaxe inválida","err.e001":"Chave { sem fechamento",
+    "err.e002":"Token inesperado","err.e003":"String ou comentário não fechado",
+    "err.e004":"Função desconhecida","err.e006":"Variável não declarada",
+    "err.e007":"Número de pin fora do limite","err.e008":"Divisão literal por zero",
+    "err.e009":"Função duplicada","err.e011":"Arquivo importado não encontrado",
+    "err.e018":"Biblioteca não suportada","err.e024":"Tipos incompatíveis",
+    "ref.label":"Referência","builtins.title":"Funções embutidas",
+    "bi.sleep":"Pausa por ms milissegundos → delay()","bi.setpin":"Escreve digital no pin → digitalWrite()",
+    "bi.getpin":"Lê digital do pin → digitalRead()","bi.setpwm":"Escreve PWM 0–255 → analogWrite()",
+    "bi.analog":"Lê analógico 0–1023 → analogRead()","bi.writable":"pinMode(pin, OUTPUT)",
+    "bi.readable":"pinMode(pin, INPUT)","bi.serial":"Serial.println(val)",
+    "bi.serialbeg":"Serial.begin(9600) — padrão 9600","bi.serialread":"Serial.parseInt()",
+    "bi.tone":"Gera tom no pin","bi.notone":"Para o tom → noTone()",
+    "bi.map":"Remapeia valor de [a,b] para [c,d]","bi.min":"Menor dos dois valores",
+    "bi.max":"Maior dos dois valores","bi.abs":"Valor absoluto",
+    "bi.constrain":"Limita v entre a e b","bi.sqrt":"Raiz quadrada",
+    "bi.pow":"Potenciação","bi.random":"Número aleatório no intervalo",
+    "bi.str":"Converte para String","bi.int":"Converte para inteiro (long)","bi.float":"Converte para float",
+    "libs.title":"Bibliotecas",
+    "libs.desc":"Use import NomeDaBib no topo do arquivo. O compilador adiciona automaticamente o #include correspondente.",
+    "libs.local":"# importar arquivo local .cnl","libs.header":"# importar header .h direto",
+    "comments.title":"Comentários",
+    "comments.l1":"# comentário de linha (estilo Python)",
+    "comments.l2":"// comentário de linha (estilo C)",
+    "comments.l3":"#+ comentário de múltiplas linhas (estilo CompToIno) +#",
+    "comments.l4":"/* comentário de bloco (estilo C) */",
+    "ex.label":"Exemplo","ex.blink_title":"Blink — LED piscando",
+    "ex.blink_desc":"O clássico \"Olá, Mundo\" do Arduino. Pisca o LED embutido no pin 13 a cada 500 ms.",
+    "ex.serial_title":"Comunicação Serial",
+    "ex.serial_desc":"Lê um número pela serial e pisca o LED aquela quantidade de vezes.",
+    "ex.serial_prompt":"\"Digite quantas vezes piscar:\"","ex.serial_done":"\"Pronto!\"",
+    "ex.servo_title":"Servo Motor",
+    "ex.servo_desc":"Importa a biblioteca Servo e move o motor de 0° a 180° e volta.",
+    "ex.servo_c1":"# vai de 0 a 180","ex.servo_c2":"# volta de 180 a 0",
+    "ex.sensor_title":"Sensor Analógico",
+    "ex.sensor_desc":"Lê um sensor de temperatura no pin A0, converte para Celsius e imprime na serial.",
+    "ex.sensor_c1":"# LM35: 10mV por grau, 5V ref, 1024 passos","ex.sensor_alert":"# alerta de calor",
+  },
+  en: {
+    "nav.start":"Start","nav.what":"What is it","nav.install":"Installation",
+    "nav.syntax":"Syntax","nav.structure":"Program structure","nav.variables":"Variables",
+    "nav.pins":"Pins","nav.flow":"Control flow","nav.functions":"Functions",
+    "nav.classes":"Classes","nav.errors":"Errors & try/catch",
+    "nav.ref":"Reference","nav.builtins":"Built-in functions","nav.libs":"Libraries","nav.comments":"Comments",
+    "nav.examples":"Examples","nav.ex_blink":"Blink","nav.ex_serial":"Serial","nav.ex_servo":"Servo","nav.ex_sensor":"Sensor",
+    "ui.copy":"Copy",
+    "intro.desc":"A simple language that compiles to Arduino sketches (.ino). Write less, read more — without losing any hardware access.",
+    "install.label":"CLI","install.title":"Installation & usage",
+    "install.desc":"No installation required with npx. Requires Node.js ≥ 14.",
+    "install.comment1":"# compile and generate the .ino","install.comment2":"# useful flags",
+    "install.flag_v":"# version","install.flag_h":"# help","install.flag_d":"# debug mode (shows AST)",
+    "structure.label":"Fundamentals","structure.title":"Program structure",
+    "structure.desc":"In Arduino, you write setup() and loop() by hand. In .cno it's implicit: everything at the root level goes into setup, and the & block becomes the loop.",
+    "structure.c1":"# setup: initial declarations and config",
+    "structure.c2":"# & = continuous loop",
+    "structure.c3":"# &(250) = loop with automatic delay at the end",
+    "structure.generated":"generated sketch.ino",
+    "vars.label":"Data","vars.title":"Variables",
+    "vars.desc1":"Local variables start with $. Global variables (accessible everywhere) use g$.",
+    "vars.desc2":"You can optionally declare the type with $name<type>.",
+    "vars.desc3":"The <=> operator swaps the values of two variables.",
+    "vars.fname":"variables.cno",
+    "vars.c1":"# local variables","vars.c2":"# with explicit type","vars.c3":"# global variable",
+    "vars.c4":"# operations","vars.c5":"# swap values","vars.c5b":"# now $a=20, $b=10",
+    "pins.label":"Hardware","pins.title":"Pins",
+    "pins.desc":"The @ syntax references pins directly, without declaring constants.",
+    "pins.th1":".cno syntax","pins.th2":"Type","pins.th3":".ino equivalent",
+    "pins.dig":"Digital","pins.ana":"Analog","pins.led":"Digital (built-in LED)",
+    "pins.c1":"# set direction","pins.c2":"# write","pins.c3":"# read","pins.c4":"# shortcut: read directly in expression",
+    "pins.on":"# turn on","pins.off":"# turn off",
+    "flow.label":"Logic","flow.title":"Control flow",
+    "flow.hot":"\"too hot\"","flow.warm":"\"warm\"","flow.cold":"\"cold\"",
+    "flow.ops":"# logical operators",
+    "flow.while_c":"# classic while","flow.for_c":"# for: (init, condition, step)",
+    "flow.sw_off":"\"off\"","flow.sw_man":"\"manual\"","flow.sw_auto":"\"automatic\"",
+    "funcs.label":"Organization","funcs.title":"Functions",
+    "funcs.desc1":"Define functions with func. Parameters use $. Functions can return a value with return.",
+    "funcs.desc2":"Functions defined in the file are called normally — the compiler places them before setup().",
+    "funcs.fname":"functions.cno",
+    "funcs.c1":"# simple function","funcs.c2":"# function with return value","funcs.c3":"# usage",
+    "cls.label":"Object-oriented","cls.title":"Classes",
+    "cls.desc1":"Define classes with class. Instantiate with new. Use Main to mark the constructor.",
+    "cls.desc2":"Instance methods are called with dot (.) notation.",
+    "err.label":"Error handling",
+    "err.desc1":"Wrap code that may fail with try. Catch the error with catch.",
+    "err.desc2":"Error codes like E006 are values — they can be compared directly.",
+    "err.desc3":"The catch operator on an expression returns the error code, or zero if there is none.",
+    "err.msg":"\"Error reading pin\"","err.catchop":"# catch as expression",
+    "err.failed":"\"failed\"","err.codes_title":"Compiler error codes",
+    "err.e000":"Invalid syntax","err.e001":"Unclosed brace {",
+    "err.e002":"Unexpected token","err.e003":"Unterminated string or comment",
+    "err.e004":"Unknown function","err.e006":"Undeclared variable",
+    "err.e007":"Pin number out of range","err.e008":"Literal division by zero",
+    "err.e009":"Duplicate function","err.e011":"Imported file not found",
+    "err.e018":"Unsupported library","err.e024":"Type mismatch",
+    "ref.label":"Reference","builtins.title":"Built-in functions",
+    "bi.sleep":"Pause for ms milliseconds → delay()","bi.setpin":"Write digital to pin → digitalWrite()",
+    "bi.getpin":"Read digital from pin → digitalRead()","bi.setpwm":"Write PWM 0–255 → analogWrite()",
+    "bi.analog":"Read analog 0–1023 → analogRead()","bi.writable":"pinMode(pin, OUTPUT)",
+    "bi.readable":"pinMode(pin, INPUT)","bi.serial":"Serial.println(val)",
+    "bi.serialbeg":"Serial.begin(9600) — default 9600","bi.serialread":"Serial.parseInt()",
+    "bi.tone":"Generate tone on pin","bi.notone":"Stop tone → noTone()",
+    "bi.map":"Remap value from [a,b] to [c,d]","bi.min":"Smaller of two values",
+    "bi.max":"Larger of two values","bi.abs":"Absolute value",
+    "bi.constrain":"Clamp v between a and b","bi.sqrt":"Square root",
+    "bi.pow":"Exponentiation","bi.random":"Random number in range",
+    "bi.str":"Convert to String","bi.int":"Convert to integer (long)","bi.float":"Convert to float",
+    "libs.title":"Libraries",
+    "libs.desc":"Use import LibName at the top of the file. The compiler automatically adds the corresponding #include.",
+    "libs.local":"# import local .cnl file","libs.header":"# import .h header directly",
+    "comments.title":"Comments",
+    "comments.l1":"# single-line comment (Python style)",
+    "comments.l2":"// single-line comment (C style)",
+    "comments.l3":"#+ multi-line comment (CompToIno style) +#",
+    "comments.l4":"/* block comment (C style) */",
+    "ex.label":"Example","ex.blink_title":"Blink — flashing LED",
+    "ex.blink_desc":"The classic Arduino \"Hello, World\". Flashes the built-in LED on pin 13 every 500 ms.",
+    "ex.serial_title":"Serial Communication",
+    "ex.serial_desc":"Reads a number from serial and blinks the LED that many times.",
+    "ex.serial_prompt":"\"How many times to blink:\"","ex.serial_done":"\"Done!\"",
+    "ex.servo_title":"Servo Motor",
+    "ex.servo_desc":"Imports the Servo library and sweeps the motor from 0° to 180° and back.",
+    "ex.servo_c1":"# sweep from 0 to 180","ex.servo_c2":"# sweep back from 180 to 0",
+    "ex.sensor_title":"Analog Sensor",
+    "ex.sensor_desc":"Reads a temperature sensor on pin A0, converts to Celsius and prints to serial.",
+    "ex.sensor_c1":"# LM35: 10mV per degree, 5V ref, 1024 steps","ex.sensor_alert":"# heat alert",
+  },
+  es: {
+    "nav.start":"Inicio","nav.what":"Qué es","nav.install":"Instalación",
+    "nav.syntax":"Sintaxis","nav.structure":"Estructura","nav.variables":"Variables",
+    "nav.pins":"Pines","nav.flow":"Control de flujo","nav.functions":"Funciones",
+    "nav.classes":"Clases","nav.errors":"Errores & try/catch",
+    "nav.ref":"Referencia","nav.builtins":"Funciones integradas","nav.libs":"Bibliotecas","nav.comments":"Comentarios",
+    "nav.examples":"Ejemplos","nav.ex_blink":"Blink","nav.ex_serial":"Serial","nav.ex_servo":"Servo","nav.ex_sensor":"Sensor",
+    "ui.copy":"Copiar",
+    "intro.desc":"Un lenguaje simple que compila a bocetos de Arduino (.ino). Escribe menos, lee más — sin perder acceso al hardware.",
+    "install.label":"CLI","install.title":"Instalación & uso",
+    "install.desc":"No se requiere instalación con npx. Requiere Node.js ≥ 14.",
+    "install.comment1":"# compilar y generar el .ino","install.comment2":"# banderas útiles",
+    "install.flag_v":"# versión","install.flag_h":"# ayuda","install.flag_d":"# modo debug (muestra AST)",
+    "structure.label":"Fundamentos","structure.title":"Estructura del programa",
+    "structure.desc":"En Arduino, escribes setup() y loop() manualmente. En .cno es implícito: todo en el nivel raíz va al setup, y el bloque & se convierte en el loop.",
+    "structure.c1":"# setup: declaraciones e inicialización",
+    "structure.c2":"# & = bucle continuo",
+    "structure.c3":"# &(250) = bucle con delay automático al final",
+    "structure.generated":"sketch.ino generado",
+    "vars.label":"Datos","vars.title":"Variables",
+    "vars.desc1":"Las variables locales comienzan con $. Las variables globales (accesibles en todo el programa) usan g$.",
+    "vars.desc2":"Puedes declarar opcionalmente el tipo con $nombre<tipo>.",
+    "vars.desc3":"El operador <=> intercambia los valores de dos variables.",
+    "vars.fname":"variables.cno",
+    "vars.c1":"# variables locales","vars.c2":"# con tipo explícito","vars.c3":"# variable global",
+    "vars.c4":"# operaciones","vars.c5":"# intercambiar valores","vars.c5b":"# ahora $a=20, $b=10",
+    "pins.label":"Hardware","pins.title":"Pines",
+    "pins.desc":"La sintaxis @ referencia pines directamente, sin necesidad de declarar constantes.",
+    "pins.th1":"Sintaxis .cno","pins.th2":"Tipo","pins.th3":"Equivalente .ino",
+    "pins.dig":"Digital","pins.ana":"Analógico","pins.led":"Digital (LED integrado)",
+    "pins.c1":"# configurar dirección","pins.c2":"# escribir","pins.c3":"# leer","pins.c4":"# atajo: leer directamente en expresión",
+    "pins.on":"# encender","pins.off":"# apagar",
+    "flow.label":"Lógica","flow.title":"Control de flujo",
+    "flow.hot":"\"muy caliente\"","flow.warm":"\"tibio\"","flow.cold":"\"frío\"",
+    "flow.ops":"# operadores lógicos",
+    "flow.while_c":"# while clásico","flow.for_c":"# for: (inicio, condición, paso)",
+    "flow.sw_off":"\"apagado\"","flow.sw_man":"\"manual\"","flow.sw_auto":"\"automático\"",
+    "funcs.label":"Organización","funcs.title":"Funciones",
+    "funcs.desc1":"Define funciones con func. Los parámetros usan $. Las funciones pueden retornar un valor con return.",
+    "funcs.desc2":"Las funciones definidas en el archivo se llaman normalmente — el compilador las coloca antes del setup().",
+    "funcs.fname":"funciones.cno",
+    "funcs.c1":"# función simple","funcs.c2":"# función con retorno","funcs.c3":"# uso",
+    "cls.label":"Orientación a objetos","cls.title":"Clases",
+    "cls.desc1":"Define clases con class. Instancia con new. Usa Main para marcar el constructor.",
+    "cls.desc2":"Los métodos de instancia se llaman con punto (.).",
+    "err.label":"Manejo de errores",
+    "err.desc1":"Envuelve código que puede fallar con try. Captura el error con catch.",
+    "err.desc2":"Los códigos de error como E006 son valores — se pueden comparar directamente.",
+    "err.desc3":"El operador catch en una expresión devuelve el código de error, o cero si no hay ninguno.",
+    "err.msg":"\"Error al leer pin\"","err.catchop":"# catch como expresión",
+    "err.failed":"\"falló\"","err.codes_title":"Códigos de error del compilador",
+    "err.e000":"Sintaxis inválida","err.e001":"Llave { sin cerrar",
+    "err.e002":"Token inesperado","err.e003":"Cadena o comentario no cerrado",
+    "err.e004":"Función desconocida","err.e006":"Variable no declarada",
+    "err.e007":"Número de pin fuera de rango","err.e008":"División literal por cero",
+    "err.e009":"Función duplicada","err.e011":"Archivo importado no encontrado",
+    "err.e018":"Biblioteca no soportada","err.e024":"Tipos incompatibles",
+    "ref.label":"Referencia","builtins.title":"Funciones integradas",
+    "bi.sleep":"Pausa por ms milisegundos → delay()","bi.setpin":"Escribe digital en pin → digitalWrite()",
+    "bi.getpin":"Lee digital del pin → digitalRead()","bi.setpwm":"Escribe PWM 0–255 → analogWrite()",
+    "bi.analog":"Lee analógico 0–1023 → analogRead()","bi.writable":"pinMode(pin, OUTPUT)",
+    "bi.readable":"pinMode(pin, INPUT)","bi.serial":"Serial.println(val)",
+    "bi.serialbeg":"Serial.begin(9600) — por defecto 9600","bi.serialread":"Serial.parseInt()",
+    "bi.tone":"Genera tono en el pin","bi.notone":"Detiene el tono → noTone()",
+    "bi.map":"Reasigna valor de [a,b] a [c,d]","bi.min":"El menor de dos valores",
+    "bi.max":"El mayor de dos valores","bi.abs":"Valor absoluto",
+    "bi.constrain":"Limita v entre a y b","bi.sqrt":"Raíz cuadrada",
+    "bi.pow":"Exponenciación","bi.random":"Número aleatorio en rango",
+    "bi.str":"Convierte a String","bi.int":"Convierte a entero (long)","bi.float":"Convierte a float",
+    "libs.title":"Bibliotecas",
+    "libs.desc":"Usa import NomeBib al inicio del archivo. El compilador agrega automáticamente el #include correspondiente.",
+    "libs.local":"# importar archivo local .cnl","libs.header":"# importar header .h directamente",
+    "comments.title":"Comentarios",
+    "comments.l1":"# comentario de línea (estilo Python)",
+    "comments.l2":"// comentario de línea (estilo C)",
+    "comments.l3":"#+ comentario multilínea (estilo CompToIno) +#",
+    "comments.l4":"/* comentario de bloque (estilo C) */",
+    "ex.label":"Ejemplo","ex.blink_title":"Blink — LED parpadeando",
+    "ex.blink_desc":"El clásico \"Hola, Mundo\" de Arduino. Parpadea el LED integrado en el pin 13 cada 500 ms.",
+    "ex.serial_title":"Comunicación Serial",
+    "ex.serial_desc":"Lee un número por serial y hace parpadear el LED esa cantidad de veces.",
+    "ex.serial_prompt":"\"¿Cuántas veces parpadear:\"","ex.serial_done":"\"¡Listo!\"",
+    "ex.servo_title":"Motor Servo",
+    "ex.servo_desc":"Importa la biblioteca Servo y mueve el motor de 0° a 180° y vuelve.",
+    "ex.servo_c1":"# ir de 0 a 180","ex.servo_c2":"# volver de 180 a 0",
+    "ex.sensor_title":"Sensor Analógico",
+    "ex.sensor_desc":"Lee un sensor de temperatura en el pin A0, convierte a Celsius e imprime por serial.",
+    "ex.sensor_c1":"# LM35: 10mV por grado, ref 5V, 1024 pasos","ex.sensor_alert":"# alerta de calor",
+  }
+};
+
+// ── i18n engine ────────────────────────────────────────
+let currentLang = localStorage.getItem('cti_lang') || 'pt';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('cti_lang', lang);
+  document.documentElement.lang = lang === 'pt' ? 'pt' : lang === 'es' ? 'es' : 'en';
+
+  // update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === lang);
+  });
+
+  // update text nodes
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    const val = T[lang][key];
+    if (val !== undefined) el.textContent = val;
+  });
+}
+
+// ── copy helpers ───────────────────────────────────────
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 1800);
+  });
+}
+
+function copyBlock(btn) {
+  const pre = btn.closest('.cblock').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    const orig = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <span>' + T[currentLang]['ui.copy'].replace('Copy','Copied').replace('Copiar','Copiado').replace('Copiar','Copiado') + '!</span>';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1800);
+  });
+}
+
+// ── active nav on scroll ───────────────────────────────
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('#sidebar a');
+
+new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' }).observe && sections.forEach(s =>
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' }).observe(s)
+);
+
+// ── init ───────────────────────────────────────────────
+setLang(currentLang);
+</script>
 </body>
 </html>
